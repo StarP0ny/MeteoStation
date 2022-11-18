@@ -1,14 +1,21 @@
 #include "main.h"
 
-#define DHTPIN 2                               // Пин к которому подключен датчик
-#define DHTTYPE DHT22                          // Используемый датчик DHT 22 (AM2302), AM2321
-DHT dht(DHTPIN, DHTTYPE);                      // Инициализируем датчик
- 
+DHT dht(dht_data, DHTTYPE);    
+
+TM1637Display display(disp_clk, disp_data);
+
 void setup() 
 {
   Serial.begin(9600);                          // Задаем скорость передачи данных
   Serial.println("DHT22 TEST!");               // Выводим текст
   dht.begin();
+  display.setBrightness(0x0f);
+  data[0] = display.encodeDigit(0);
+  data[1] = display.encodeDigit(1);
+  data[2] = display.encodeDigit(2);
+  data[3] = display.encodeDigit(3);
+  display.setSegments(data, 4, 0);
+  //disp.showNumberDec(1, true);
 }
  
 void loop() 
@@ -30,4 +37,8 @@ void loop()
   Serial.print("Temperature: ");                // Выводим текст
   Serial.print(t);                              // Отображаем температуру
   Serial.println(" *C ");                       // Выводим текст
+  display.showNumberDec(t, false, 2, 0);
+  //display.setSegments(data+2, 2, 3);
+  display.showNumberDec(h, false, 2, 2);
+
 }
